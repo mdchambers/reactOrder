@@ -10,9 +10,12 @@ class App extends Component {
       {name: "Sam", age: 20},
       {name: "Foo", age: 200},
       {name: "Bar", age: 5},
-    ]
+    ],
+    otherState: "some other value",
+    showPersons: false,
   }
 
+  // Randomly selects new names
   switchNameHandler = () => {
     // console.log("clicked");
     const randNames = [ "Grimley", "Garbo", "Grishmack", "Grubble", "Gaddlefly", "Gobble", "Greenhorn"];
@@ -27,8 +30,9 @@ class App extends Component {
         {name: newNames.pop(), age: 5},
       ]
     });  
-  }
+  };
 
+  // Changes middle name to one provided by event
   nameChangeHandler = (event) => {
     this.setState({
       people: [
@@ -37,7 +41,13 @@ class App extends Component {
         {name: "Bar", age: 5},
       ]
     })
-  }
+  };
+
+  togglePersonHandler = () => {
+    this.setState({
+      showPersons: !this.state.showPersons,
+    })
+  };
 
   render() {
     const style = {
@@ -48,22 +58,32 @@ class App extends Component {
       cursor: 'pointer',
     };
 
+    // Render persons if showPersons is true
+    let persons = null;
+    if (this.state.showPersons) {
+      persons = (
+        <div>
+          <Person name={this.state.people[0].name} />
+          <Person 
+            name={this.state.people[1].name} 
+            click={this.switchNameHandler}
+            change={this.nameChangeHandler}
+          />
+          <Person name={this.state.people[2].name} />
+        </div>
+      );
+    }
+
     return (
       <div className="App">
         <h1>Hello world</h1>
         <button
-          onClick={this.switchNameHandler}
+          onClick={this.togglePersonHandler}
           style={style}  
         >
           Switch name
         </button>
-        <Person name={this.state.people[0].name} />
-        <Person 
-          name={this.state.people[1].name} 
-          click={this.switchNameHandler}
-          change={this.nameChangeHandler}
-        />
-        <Person name={this.state.people[2].name} />
+        {persons}
       </div>
     );  
   }
