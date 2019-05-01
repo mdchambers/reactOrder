@@ -8,6 +8,7 @@ import Aux from '../hoc/Aux';
 // import Radium, { StyleRoot } from 'radium';
 import _ from 'underscore';
 import Cockpit from '../components/Cockpit/Cockpit';
+import AuthContext from '../context/auth-context';
 
 //// AS CLASS 
 class App extends Component {
@@ -24,6 +25,7 @@ class App extends Component {
     ],
     otherState: "some other value",
     showPersons: true,
+    authenticated: false,
   }
 
   static getDerivedStateFromProps(props, state){
@@ -84,8 +86,6 @@ class App extends Component {
 
   // Removes a person from the state array
   deletePersonHandler = (index) => {
-
-
     // Slice method copies array so state change is immutable
     // const people = this.state.people.slice();
     // Or use spread operator
@@ -95,6 +95,14 @@ class App extends Component {
     // Update state with new array
     this.setState({
       people: people,
+    });
+  }
+
+  loginHandler = () => {
+    this.setState((prevState, prevProps) => {
+      return {
+        authenticated: ! prevState.authenticated,
+      }
     });
   }
 
@@ -115,12 +123,17 @@ class App extends Component {
 
     return (
       <Aux>
+        <AuthContext.Provider value={{
+          authenticated: this.state.authenticated,
+          login: this.loginHandler,
+        }}>
         <Cockpit
           people={this.state.people}
           clicked={this.togglePersonHandler}
           showPersons={this.state.showPersons}
         />
         {persons}
+        </AuthContext.Provider>
       </Aux>
     );  
   }
