@@ -1,6 +1,7 @@
 import React, { Component, useState } from 'react';
 import styles from './App.module.css';
 import Person from './Person/Person';
+import ErrorBoundary from './ErrorBoundary/ErrorBoundary';
 // import Radium, { StyleRoot } from 'radium';
 import _ from 'underscore';
 
@@ -53,6 +54,10 @@ class App extends Component {
   };
 
   togglePersonHandler = () => {
+    // Simulate random chance of throwing error
+    if(Math.random() > 0.7 ){
+      throw new Error("bad shit");
+    }
     this.setState({
       showPersons: !this.state.showPersons,
     })
@@ -60,6 +65,8 @@ class App extends Component {
 
   // Removes a person from the state array
   deletePersonHandler = (index) => {
+
+
     // Slice method copies array so state change is immutable
     // const people = this.state.people.slice();
     // Or use spread operator
@@ -73,6 +80,9 @@ class App extends Component {
   }
 
   render() {
+
+
+
     // Render persons if showPersons is true
     let persons = null;
     let btnClass = '';
@@ -81,13 +91,17 @@ class App extends Component {
       persons = (
         <div>
           {this.state.people.map( (person, index) => {
-            return ( <Person 
-              click={() => this.deletePersonHandler(index)}
-              name={person.name} 
-              age={person.age} 
-              key={person.id}
-              change={ (event) => this.nameChangeHandler(event, person.id)}
-            /> )
+            return ( 
+              // Wraps in ErrorBoundary to catch error
+              <ErrorBoundary key={person.id} >
+                <Person 
+                  click={() => this.deletePersonHandler(index)}
+                  name={person.name} 
+                  age={person.age} 
+                  change={ (event) => this.nameChangeHandler(event, person.id)}
+                />
+              </ErrorBoundary> 
+            )
           })}
         </div>
       );
