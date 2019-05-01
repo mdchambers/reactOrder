@@ -5,14 +5,14 @@ const Cockpit = (props) => {
 
     // Run only on first render (eqiv to componentDidMount?)
     useEffect(() => {
-        console.log("[Cockpit.js] useEffect mount")
+        // console.log("[Cockpit.js] useEffect mount")
     }, []);
     // Run when props.people changes
     useEffect(() => {
-        console.log("[Cockpit.js] useEffect props.people");
+        // console.log("[Cockpit.js] useEffect props.people");
     }, [props.people]);
 
-    console.log('[Cockpit.js] render');
+    // console.log('[Cockpit.js] render');
     const classes = [];
     if(props.people.length <= 2){
       classes.push(styles.red);

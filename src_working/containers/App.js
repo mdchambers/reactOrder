@@ -11,11 +11,10 @@ import Cockpit from '../components/Cockpit/Cockpit';
 
 //// AS CLASS 
 class App extends Component {
-  constructor(props){
-    super(props);
-    console.log("[App.js] constructor " + props);
-
-  }
+  // constructor(props){
+  //   super(props);
+  //   console.log("[App.js] constructor " + props);
+  // }
 
   state = {
     people: [
@@ -28,12 +27,12 @@ class App extends Component {
   }
 
   static getDerivedStateFromProps(props, state){
-    console.log("[App.js] Get derived state from props " + props);
+    // console.log("[App.js] Get derived state from props " + props);
     return state;
   }
 
   componentDidMount() {
-    console.log('[App.js] mounted');
+    // console.log('[App.js] mounted');
   }
 
   // Randomly selects new names
@@ -100,7 +99,7 @@ class App extends Component {
   }
 
   render() {
-    console.log('[App.js] render ');
+    // console.log('[App.js] render ');
     // Render persons if showPersons is true
     let persons = null;
     if (this.state.showPersons) {

@@ -10,21 +10,21 @@ class Persons extends Component {
     // }
 
     shouldComponentUpdate(nextProps, nextState) {
-        console.log("[Persons.js] shouldComponentUpdate")
+        // console.log("[Persons.js] shouldComponentUpdate")
         return true;
     }
 
     getSnapshotBeforeUpdate(prevProps, prevState) {
-        console.log("[Persons.js] getsnapshotbeforeupdate");
+        // console.log("[Persons.js] getsnapshotbeforeupdate");
         return {message: 'from snapshot'};
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
-        console.log('[Persons.js] componentDidUpdate with snapshot: ' + snapshot.message);
+        // console.log('[Persons.js] componentDidUpdate with snapshot: ' + snapshot.message);
     }
 
     render() {
-        console.log('[Persons.js] render');    
+        // console.log('[Persons.js] render');    
         return this.props.people.map( (person, index) => {
             return ( 
                 <Person 
