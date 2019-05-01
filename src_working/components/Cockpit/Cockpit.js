@@ -1,9 +1,18 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styles from './Cockpit.module.css';
 
 const Cockpit = (props) => {
 
-    // console.log(styles);
+    // Run only on first render (eqiv to componentDidMount?)
+    useEffect(() => {
+        console.log("[Cockpit.js] useEffect mount")
+    }, []);
+    // Run when props.people changes
+    useEffect(() => {
+        console.log("[Cockpit.js] useEffect props.people");
+    }, [props.people]);
+
+    console.log('[Cockpit.js] render');
     const classes = [];
     if(props.people.length <= 2){
       classes.push(styles.red);

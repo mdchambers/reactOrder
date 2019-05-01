@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import styles from './App.module.css';
 // import Person from '../components/Persons/Person/Person';
 import Persons from '../components/Persons/Persons';
+import withClass from '../hoc/withClass';
+import Aux from '../hoc/Aux';
 // import ErrorBoundary from '../components/ErrorBoundary/ErrorBoundary';
 // import Radium, { StyleRoot } from 'radium';
 import _ from 'underscore';
@@ -9,6 +11,12 @@ import Cockpit from '../components/Cockpit/Cockpit';
 
 //// AS CLASS 
 class App extends Component {
+  constructor(props){
+    super(props);
+    console.log("[App.js] constructor " + props);
+
+  }
+
   state = {
     people: [
       {id: 'p1', name: "Sam", age: 20},
@@ -17,6 +25,15 @@ class App extends Component {
     ],
     otherState: "some other value",
     showPersons: true,
+  }
+
+  static getDerivedStateFromProps(props, state){
+    console.log("[App.js] Get derived state from props " + props);
+    return state;
+  }
+
+  componentDidMount() {
+    console.log('[App.js] mounted');
   }
 
   // Randomly selects new names
@@ -83,6 +100,7 @@ class App extends Component {
   }
 
   render() {
+    console.log('[App.js] render ');
     // Render persons if showPersons is true
     let persons = null;
     if (this.state.showPersons) {
@@ -97,16 +115,16 @@ class App extends Component {
     }
 
     return (
-      <div className={styles.App}>
+      <Aux>
         <Cockpit
           people={this.state.people}
           clicked={this.togglePersonHandler}
           showPersons={this.state.showPersons}
         />
         {persons}
-      </div>
+      </Aux>
     );  
   }
 }
 
-export default App;
+export default withClass(App, styles.App);
