@@ -6,8 +6,9 @@ import Backdrop from '../Backdrop/Backdrop';
 class Modal extends Component {
 
     // Prevent from updating child components unless shown or unshown
+    // Allow to update with spinner when sending POST request
     shouldComponentUpdate(nextProps, nextState) {
-        return nextProps.show !== this.props.show;
+        return nextProps.show !== this.props.show || nextProps.children !== this.props.children;
     }
 
     render() {
