@@ -35,9 +35,26 @@ class BurgerBuilder extends Component {
             .then( res => {
                 // console.log(res);
                 // console.log(res.data);
-                this.setState( { ingredients: res.data });
+                this.setState( { ingredients: res.data }, () => { 
+                    this.updatePurchaseState(res.data);
+                    this.updatePrice();
+                });
+
             })
             .catch( err => { this.setState({ error: true })})
+    }
+
+    updatePrice = () => {
+        console.log("[BB] price updated" + this.state.ingredients);
+        let price = 0;
+        price += this.state.ingredients.salad * INGREDIENT_PRICES.salad;
+        price += this.state.ingredients.cheese * INGREDIENT_PRICES.cheese;
+        price += this.state.ingredients.meat * INGREDIENT_PRICES.meat;
+        price += this.state.ingredients.bacon * INGREDIENT_PRICES.bacon;
+
+        this.setState({
+            totalPrice: price,
+        })
     }
 
     updatePurchaseState = (updatedIngredients) => {
@@ -58,15 +75,14 @@ class BurgerBuilder extends Component {
         };
         updatedIngredients[type] = updatedCount;
         
-        const priceAddition = INGREDIENT_PRICES[type];
-        const oldPrice = this.state.totalPrice;
-        const newPrice = oldPrice + priceAddition;
-
         this.setState({
-            ingredients: updatedIngredients,
-            totalPrice: newPrice,
+            ingredients: updatedIngredients
+        },
+        () => {
+            this.updatePurchaseState(updatedIngredients);
+            this.updatePrice();
         });
-        this.updatePurchaseState(updatedIngredients);
+
     }
 
     removeIngredientHandler = (type) => {
@@ -80,15 +96,13 @@ class BurgerBuilder extends Component {
         };
         updatedIngredients[type] = updatedCount;
         
-        const priceRemoval = INGREDIENT_PRICES[type];
-        const oldPrice = this.state.totalPrice;
-        const newPrice = oldPrice - priceRemoval;
-
         this.setState({
-            ingredients: updatedIngredients,
-            totalPrice: newPrice,
+            ingredients: updatedIngredients
+        },
+        () => {
+            this.updatePurchaseState(updatedIngredients);
+            this.updatePrice();
         });
-        this.updatePurchaseState(updatedIngredients);
     }
 
     purchaseHandler = () => {
@@ -104,31 +118,21 @@ class BurgerBuilder extends Component {
     }
 
     purchaseContinueHandler = () => {
-        this.setState({ loading: true });
-        const order = {
-            ingredients: this.state.ingredients,
-            price: this.state.totalPrice,
-            customer: {
-                name: 'mike',
-                address: {
-                    street: '100 Foo St',
-                    city: 'Foo City',
-                    zip: '11111',
-                    country: 'Fooistan',
-                },
-                email: 'foo@foo.foo',
-            },
-            deliveryMethod: 'by fooing',
-        };
-        dbase.post('/orders.json', order)
-            .then( response => { 
-                console.log(response);
-                this.setState({ loading: false, purchasing: false });
-            })
-            .catch( error => { 
-                console.log(error);
-                this.setState({ loading: false, purchasing: false });
-            })
+        this.setState({
+            purchasing: false,
+        });
+        // console.log("in purchase");
+        const queryParams = [];
+        for(let i in this.state.ingredients){
+            queryParams.push( encodeURIComponent(i) + "=" + encodeURIComponent(this.state.ingredients[i] ))
+        }
+        queryParams.push('totalPrice=' + this.state.totalPrice);
+        // console.log(queryParams);
+        const queryString = queryParams.join('&');
+        this.props.history.push({
+            pathname: '/checkout',
+            search: "?" + queryString,
+        })
     }
 
     render() {

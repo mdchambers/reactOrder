@@ -1,4 +1,7 @@
 import React, { Component } from 'react';
+// import { Link } from 'react-router-dom';
+
+
 import classes from './OrderSummary.module.css';
 
 import Button from '../../UI/Button/Button';
@@ -6,7 +9,7 @@ import Button from '../../UI/Button/Button';
 class OrderSummary extends Component {
 
     componentDidUpdate () {
-        console.log("[OrderSummary] updated");
+        // console.log("[OrderSummary] updated");
     }
     
     render() {
