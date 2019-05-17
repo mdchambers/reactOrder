@@ -5,39 +5,40 @@ import { connect } from "react-redux";
 import CounterControl from "../../components/CounterControl/CounterControl";
 import CounterOutput from "../../components/CounterOutput/CounterOutput";
 
-import * as actionTypes from '../../store/actions';
+// import * as actionTypes from '../../store/actions/actions';
+import * as actionCreators from '../../store/actions/index';
 
 class Counter extends Component {
-  state = {
-    counter: 0
-  };
+  // state = {
+  //   counter: 0
+  // };
 
-  counterChangedHandler = (action, value) => {
-    switch (action) {
-      case "inc":
-        this.setState(prevState => {
-          return { counter: prevState.counter + 1 };
-        });
-        break;
-      case "dec":
-        this.setState(prevState => {
-          return { counter: prevState.counter - 1 };
-        });
-        break;
-      case "add":
-        this.setState(prevState => {
-          return { counter: prevState.counter + value };
-        });
-        break;
-      case "sub":
-        this.setState(prevState => {
-          return { counter: prevState.counter - value };
-        });
-        break;
-      default:
-        break;
-    }
-  };
+  // counterChangedHandler = (action, value) => {
+  //   switch (action) {
+  //     case "inc":
+  //       this.setState(prevState => {
+  //         return { counter: prevState.counter + 1 };
+  //       });
+  //       break;
+  //     case "dec":
+  //       this.setState(prevState => {
+  //         return { counter: prevState.counter - 1 };
+  //       });
+  //       break;
+  //     case "add":
+  //       this.setState(prevState => {
+  //         return { counter: prevState.counter + value };
+  //       });
+  //       break;
+  //     case "sub":
+  //       this.setState(prevState => {
+  //         return { counter: prevState.counter - value };
+  //       });
+  //       break;
+  //     default:
+  //       break;
+  //   }
+  // };
 
   render() {
     return (
@@ -84,12 +85,12 @@ const mapStateToProps = state => {
 // Takes in Redux actions and returns on obj which is passed to Counter as props
 const mapDispatchToProps = dispatch => {
   return {
-    onIncrementCounter: () => dispatch({ type: actionTypes.INCREMENT, }),
-    onDecrementCounter: () => dispatch({ type: actionTypes.DECREMENT, }),
-    onAddCounter: () => dispatch({ type: actionTypes.ADD, val: 10}),
-    onSubtractCounter: () => dispatch({ type: actionTypes.SUBTRACT, val: 10}),
-    onStoreResult: (val) => dispatch({ type: actionTypes.STORE, val: val}),
-    onRemoveResult: (id) => dispatch({type: actionTypes.DELETE, idx: id}),
+    onIncrementCounter: () => dispatch(actionCreators.increment()),
+    onDecrementCounter: () => dispatch(actionCreators.decrement()),
+    onAddCounter: () => dispatch(actionCreators.add(5)),
+    onSubtractCounter: () => dispatch(actionCreators.subtract(5)),
+    onStoreResult: (val) => dispatch(actionCreators.storeResultAsync(val)),
+    onRemoveResult: (id) => dispatch(actionCreators.deleteResult(id)),
     
   };
 };

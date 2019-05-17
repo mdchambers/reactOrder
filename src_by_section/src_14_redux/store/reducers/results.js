@@ -1,5 +1,6 @@
-import * as actionTypes from '../actions';
+import * as actionTypes from '../actions/actionTypes';
 
+import { updateObject } from '../utility';
 
 const initialState = {
     results: [],
@@ -15,7 +16,7 @@ const reducer = (state = initialState, action) => {
     
     switch(action.type) {
         case actionTypes.STORE:
-            newResults.push({id: new Date(), val: action.val });
+            newResults.push({id: Math.random(), val: action.val });
             break
         case actionTypes.DELETE:
             newResults.splice(action.idx, 1)
@@ -24,10 +25,7 @@ const reducer = (state = initialState, action) => {
             break;
     }
 
-    return {
-        ...state,
-        results: newResults,
-    }
+    return updateObject(state, {results: newResults})
 }
 
 export default reducer;
