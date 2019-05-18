@@ -110,13 +110,13 @@ export class ContactData extends Component {
     }
     // console.log(formData);
     this.setState({ loading: true });
-
+    console.log(this.props);
     const order = {
       ingredients: this.props.ingredients,
-      price: this.props.totalPrice,
+      price: this.props.price,
       orderData: formData
     };
-    // console.log(order);
+    console.log(order);
     dbase
       .post("/orders.json", order)
       .then(response => {
@@ -228,8 +228,8 @@ export class ContactData extends Component {
 
 const mapStateToProps = state => {
   return {
-    ingredients: state.ingredients,
-    price: state.totalPrice
+    ingredients: state.brg.ingredients,
+    price: state.brg.totalPrice
   };
 };
 

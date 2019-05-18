@@ -1,4 +1,4 @@
-import * as actionTypes from "./actions";
+import * as actionTypes from '../actions/actionTypes';
 
 const INGREDIENT_PRICES = {
   salad: 0.5,
@@ -17,22 +17,26 @@ const updatePrice = ingredients => {
   return price;
 };
 
+
 const initialIngredients = {
   salad: 0,
   cheese: 0,
   bacon: 0,
-  meat: 1
+  meat: 0
 };
+
 const initialState = {
   ingredients: initialIngredients,
-  totalPrice: updatePrice(initialIngredients),
-  purchasable: true
+  totalPrice: 0,
+  purchasable: false,
+  loading: true
 };
+
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case actionTypes.UPDATE_INGREDIENT:
-      const newCount = state.ingredients[action.ingredientType] + action.ingredientDelta;
+      const newCount = state.ingredients ? state.ingredients[action.ingredientType] + action.ingredientDelta : action.ingredientDelta;
       if( newCount < 0 ){
         return({ ...state })
       }
@@ -41,13 +45,14 @@ const reducer = (state = initialState, action) => {
       // update price and purchasable
       const newPrice = updatePrice(newIngredients);
       const newPurchasable = newPrice > 0;
-      console.log(newIngredients);
+      // console.log(newIngredients);
 
       return {
         ...state,
         ingredients: newIngredients,
         totalPrice: newPrice,
-        purchasable: newPurchasable
+        purchasable: newPurchasable,
+        loading: false
       };
     case actionTypes.TOGGLE_PURCHASABLE:
       break;

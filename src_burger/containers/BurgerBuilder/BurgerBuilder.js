@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import * as actionTypes from '../../store/actions';
+import * as actionCreators from '../../store/actions/burger';
 
 import Burger from '../../components/Burger/Burger';
 import BuildControls from '../../components/Burger/BuildControls/BuildControls';
@@ -22,22 +22,14 @@ class BurgerBuilder extends Component {
         // totalPrice: 0,
         // purchasable: false,
         purchasing: false,
-        loading: false,
+        // loading: false,
         error: false,
     };
 
     componentDidMount () {
-        // dbase.get('/ingredients.json')
-        //     .then( res => {
-        //         // console.log(res);
-        //         // console.log(res.data);
-        //         this.setState( { ingredients: res.data }, () => { 
-        //             this.updatePurchaseState(res.data);
-        //             this.updatePrice();
-        //         });
-
-        //     })
-        //     .catch( err => { this.setState({ error: true })})
+        if( this.props.loading) {
+            this.props.fetchIngredients();
+        }
     }
 
     purchaseHandler = () => {
@@ -80,7 +72,8 @@ class BurgerBuilder extends Component {
 
         // Set order summary for modal, if not waiting for server response and ingredients are loaded
         let orderSummary = <Spinner />
-        if( ! this.state.loading ){
+        if( ! this.props.loading ){
+            // console.log('rendering ordersummary', this.props.loading)
             orderSummary = (
                 <OrderSummary 
                     ingredients={this.props.ingredients}
@@ -93,7 +86,7 @@ class BurgerBuilder extends Component {
 
         // Check if burger default loaded, then display
         let burger = this.state.error ? <h2>Ingredients cannot be loaded</h2> : <Spinner />;
-        if( this.props.ingredients ){
+        if( this.props.ingredients && ! this.props.loading ){
             burger = (
                 <React.Fragment>
                     <Burger ingredients={this.props.ingredients}/>
@@ -123,16 +116,18 @@ class BurgerBuilder extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        ingredients: state.ingredients,
-        totalPrice: state.totalPrice,
-        purchasable: state.purchasable,
+        ingredients: state.brg.ingredients,
+        totalPrice:  state.brg.totalPrice,
+        purchasable: state.brg.purchasable,
+        loading:     state.brg.loading,
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
-        addIngredientHandler: (type) => dispatch({ type: actionTypes.UPDATE_INGREDIENT, ingredientType: type, ingredientDelta: 1}),
-        removeIngredientHandler: (type) => dispatch({ type: actionTypes.UPDATE_INGREDIENT, ingredientType: type, ingredientDelta: -1}),
+        addIngredientHandler: (type, toAdd) => dispatch(actionCreators.updateIngredient(type, toAdd)),
+        removeIngredientHandler: (type, toRemove) => dispatch(actionCreators.updateIngredient(type, -toRemove) ),
+        fetchIngredients: () => dispatch(actionCreators.fetchIngredients() )
     }
 }
 

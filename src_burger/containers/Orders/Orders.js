@@ -1,46 +1,26 @@
 import React, { Component } from 'react'
-import dbase from '../../axios-orders';
+
+import * as actionCreators from '../../store/actions/orders';
+
+import { connect } from 'react-redux';
 
 import Order from '../../components/Order/Order';
 import Spinner from '../../components/UI/Spinner/Spinner';
-import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 
 export class Orders extends Component {
-    state = {
-        orders: null,
-        loading: true,
-    }
-    componentDidMount() {
-        dbase.get('/orders.json')
-            .then( res => {
-                this.setState({ loading: false });
-                console.log(res);
-                this.parseOrders(res.data);
-            })
-            .catch( err => {
-                this.setState({ loading: false });
-                console.log(err);
-            })
-    }
 
-    parseOrders(res) {
-        let fetchedOrders = [];
-        for(let o in res){
-            fetchedOrders.push({
-                ...res[o],
-                id: o,
-            });
-        }
-        console.log(fetchedOrders);
-        this.setState({orders: fetchedOrders});
+    componentDidMount() {
+        // Fetch orders
+        console.log("[Orders] fetching orders");
+        this.props.fetchOrders();
     }
 
     render() {
         let orders = <Spinner />;
-        if( ! this.state.loading && this.state.orders){
+        if( ! this.props.loading && this.props.orders){
             orders = (
                 <React.Fragment>
-                {this.state.orders.map( (order) => {
+                {this.props.orders.map( (order) => {
                     return <Order 
                         key={order.id} 
                         ingredients={order.ingredients}
@@ -59,4 +39,17 @@ export class Orders extends Component {
     }
 }
 
-export default withErrorHandler(Orders, dbase)
+const mapStateToProps = (state) => {
+    return {
+        orders: state.ord.orders,
+        loading: state.ord.loading,
+    }
+}
+
+const mapDispatchToProps = dispatch => {
+    return {
+        fetchOrders: () => dispatch(actionCreators.fetchOrders())
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Orders);
