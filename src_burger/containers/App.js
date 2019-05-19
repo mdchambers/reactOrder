@@ -49,7 +49,7 @@ class App extends Component {
             )}
           />
           <Route
-            path="/auth"
+            path="/checkout"
             render={() => (
               <Suspense fallback={<div>Loading...</div>}>
                 <Checkout />

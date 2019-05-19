@@ -17,7 +17,7 @@ import dbase from '../../axios-orders';
 // import axios from 'axios';
 
 
-class BurgerBuilder extends Component {
+export class BurgerBuilder extends Component {
 
     state = {
         // ingredients: null,
