@@ -1,6 +1,10 @@
 import React, { Component } from "react";
-import dbase from "../../axios-orders";
+// import dbase from "../../axios-orders";
+
+import { Redirect } from 'react-router';
+
 import { connect } from 'react-redux';
+import * as actions from '../../store/actions/index';
 
 import Button from "../../components/UI/Button/Button";
 import Spinner from "../../components/UI/Spinner/Spinner";
@@ -100,34 +104,26 @@ export class ContactData extends Component {
   orderHandler = event => {
     // Stop form from reloading page
     event.preventDefault();
-    // console.log(this.props);
 
+    // Prepare customer data
     const formData = {};
     for (let formElementIdentifier in this.state.orderForm) {
       formData[formElementIdentifier] = this.state.orderForm[
         formElementIdentifier
       ].value;
     }
-    // console.log(formData);
+    // Set loading state
     this.setState({ loading: true });
-    console.log(this.props);
+    // Prepare order
     const order = {
       ingredients: this.props.ingredients,
       price: this.props.price,
-      orderData: formData
+      orderData: formData,
+      uid: this.props.uid,
     };
-    console.log(order);
-    dbase
-      .post("/orders.json", order)
-      .then(response => {
-        console.log(response);
-        this.setState({ loading: false });
-        this.props.history.push("/");
-      })
-      .catch(error => {
-        console.log(error);
-        this.setState({ loading: false });
-      });
+
+    // Post order
+    this.props.sendOrder(order, this.props.token);
   };
 
   checkValidity(value, rules) {
@@ -184,6 +180,11 @@ export class ContactData extends Component {
   };
 
   render() {
+    // If ordering done, redirect
+    if(this.props.orderSubmitted){
+      return <Redirect to='/' />
+    }
+
     const formElementsArray = [];
     for (let key in this.state.orderForm) {
       formElementsArray.push({
@@ -229,8 +230,19 @@ export class ContactData extends Component {
 const mapStateToProps = state => {
   return {
     ingredients: state.brg.ingredients,
-    price: state.brg.totalPrice
+    price: state.brg.totalPrice,
+    uid: state.auth.uid,
+    loading: state.ord.checkoutLoading,
+    orderSubmitted: state.ord.orderSubmitted,
+    token: state.auth.idToken
   };
 };
 
-export default connect(mapStateToProps)(ContactData);
+const mapDispathToProps = (dispatch) => {
+  return {
+    sendOrder: (order, token) => dispatch(actions.sendOrder(order, token) )
+  }
+}
+
+
+export default connect(mapStateToProps, mapDispathToProps)(ContactData);

@@ -12,7 +12,7 @@ export class Orders extends Component {
     componentDidMount() {
         // Fetch orders
         console.log("[Orders] fetching orders");
-        this.props.fetchOrders();
+        this.props.fetchOrders(this.props.token, this.props.userId);
     }
 
     render() {
@@ -43,12 +43,14 @@ const mapStateToProps = (state) => {
     return {
         orders: state.ord.orders,
         loading: state.ord.loading,
+        token: state.auth.idToken,
+        userId: state.auth.uid,
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
-        fetchOrders: () => dispatch(actionCreators.fetchOrders())
+        fetchOrders: (token, uid) => dispatch(actionCreators.fetchOrders(token, uid))
     }
 }
 
