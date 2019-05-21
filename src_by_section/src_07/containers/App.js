@@ -124,7 +124,7 @@ class App extends Component {
     return (
       <Aux>
         <AuthContext.Provider value={{
-          authenticated: this.state.authenticated,
+          status: this.state.authenticated,
           login: this.loginHandler,
         }}>
         <Cockpit
