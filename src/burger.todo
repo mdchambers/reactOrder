@@ -1,0 +1,11 @@
+BurgerBuilder:
+  ☐ Convert to function components
+    ✔ App.js @done(19-05-21 15:19)
+    ✔ Auth.js @done(19-05-21 15:20)
+    ✔ Logout.js @done(19-05-21 15:21)
+    ✔ BurgerBuilder.js @done(19-05-21 15:29)
+    ✔ Checkout @done(19-05-21 15:31)
+    ✔ ContactData @done(19-05-21 15:40)
+    ✔ Orders @done(19-05-21 15:42)
+    ✔ Layout @done(19-05-21 16:23)
+  ☐ Replace redux w/ useContext & useReducer

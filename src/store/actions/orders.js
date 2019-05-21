@@ -12,7 +12,8 @@ const storeOrders = orders => {
 export const fetchOrders = (token, userId) => {
   return dispatch => {
     // console.log(dbase.baseURL);
-    const queryParams = '?auth=' + token + '&orderBy="uid"&equalTo="' + userId + '"';
+    const queryParams =
+      "?auth=" + token + '&orderBy="uid"&equalTo="' + userId + '"';
     const reqURL = "/orders.json" + queryParams;
     // console.log("url: " + reqURL);
     dbase
@@ -40,7 +41,7 @@ const orderSuccess = () => {
   };
 };
 
-const orderFail = (error) => {
+const orderFail = error => {
   return {
     type: actionTypes.ORDER_FAIL,
     error: error
@@ -50,7 +51,7 @@ const orderFail = (error) => {
 export const sendOrder = (order, token) => {
   return dispatch => {
     dispatch(orderStart());
-    const reqURL = "/orders.json?auth=" + token
+    const reqURL = "/orders.json?auth=" + token;
     // console.log(reqURL, order)
     dbase
       .post(reqURL, order)
@@ -62,7 +63,7 @@ export const sendOrder = (order, token) => {
       })
       .catch(error => {
         console.log(error);
-        dispatch( orderFail(error) );
+        dispatch(orderFail(error));
         // this.setState({ loading: false });
       });
   };
