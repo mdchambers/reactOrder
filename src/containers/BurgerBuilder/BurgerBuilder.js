@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useReducer } from "react";
 import { connect } from "react-redux";
 // import { Redirect } from 'react-router-dom';
 
@@ -9,18 +9,19 @@ import BuildControls from "../../components/Burger/BuildControls/BuildControls";
 import Modal from "../../components/UI/Modal/Modal";
 import OrderSummary from "../../components/Burger/OrderSummary/OrderSummary";
 import withErrorHandler from "../../hoc/withErrorHandler/withErrorHandler";
-
 import Spinner from "../../components/UI/Spinner/Spinner";
 
-// import axios from 'axios';
 import dbase from "../../axios-orders";
-// import axios from 'axios';
 
 export const BurgerBuilder = props => {
   const [uiState, setUiState] = useState({
     purchasing: false,
     error: false
   });
+
+  // Set up reducer for burger ingredients
+
+
 
   const [ loading, fetchIngredients] = [props.loading, props.fetchIngredients]
   useEffect(() => {

@@ -9,3 +9,6 @@ BurgerBuilder:
     ✔ Orders @done(19-05-21 15:42)
     ✔ Layout @done(19-05-21 16:23)
   ☐ Replace redux w/ useContext & useReducer
+    ☐ burger reducer
+      Set up useReducer in app.js
+      pass down state and dispatch through context api

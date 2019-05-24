@@ -1,4 +1,4 @@
-import React, { useEffect, Suspense } from "react";
+import React, { useEffect, useReducer, Suspense } from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 
@@ -16,7 +16,6 @@ import * as actions from "../store/actions/index";
 const Checkout = React.lazy(() => import("./Checkout/Checkout"));
 const Auth = React.lazy(() => import("./Auth/Auth"));
 
-// TODO: convert App to func component
 const App = props => {
   
   // TODO: auth to useReducer (or custom hook?)

@@ -1,4 +1,4 @@
-import * as actionTypes from '../actions/actionTypes';
+import * as actionTypes from "../actions/actionTypes";
 
 const INGREDIENT_PRICES = {
   salad: 0.5,
@@ -17,7 +17,6 @@ const updatePrice = ingredients => {
   return price;
 };
 
-
 const initialIngredients = {
   salad: 0,
   cheese: 0,
@@ -32,30 +31,33 @@ const initialState = {
   loading: true
 };
 
+const updateIngredient = (state, action) => {
+  const newCount = state.ingredients
+    ? state.ingredients[action.ingredientType] + action.ingredientDelta
+    : action.ingredientDelta;
+  if (newCount < 0) {
+    return { ...state };
+  }
+  const newIngredients = { ...state.ingredients };
+  newIngredients[action.ingredientType] = newCount;
+
+  // update price and purchasable
+  const newPrice = updatePrice(newIngredients);
+  const newPurchasable = newPrice > 0;
+
+  return {
+    ...state,
+    ingredients: newIngredients,
+    totalPrice: newPrice,
+    purchasable: newPurchasable,
+    loading: false
+  };
+};
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case actionTypes.UPDATE_INGREDIENT:
-      const newCount = state.ingredients ? state.ingredients[action.ingredientType] + action.ingredientDelta : action.ingredientDelta;
-      if( newCount < 0 ){
-        return({ ...state })
-      }
-      const newIngredients = { ...state.ingredients };
-      newIngredients[action.ingredientType] = newCount;
-      // update price and purchasable
-      const newPrice = updatePrice(newIngredients);
-      const newPurchasable = newPrice > 0;
-      // console.log(newIngredients);
-
-      return {
-        ...state,
-        ingredients: newIngredients,
-        totalPrice: newPrice,
-        purchasable: newPurchasable,
-        loading: false
-      };
-    case actionTypes.TOGGLE_PURCHASABLE:
-      break;
+      return updateIngredient(state, action);
     default:
       return state;
   }
